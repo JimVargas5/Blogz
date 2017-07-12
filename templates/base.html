@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{title}}</title>
+        <style>
+            .error {
+                color: red;
+            }
+            table, tr, td {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <table>
+                <tr>
+                    <td> <a href= '/blog'> Home </a> </td>
+                    <td> <a href= '/add'> Add a blog post </a> </td>
+                </tr>
+            </table>
+        </div>
+
+        {% block content %}
+
+        {% endblock %}
+
+    </body>
+    <footer>
+        <br>
+        <br>
+        <br>
+        <p>Jim's freakin blog thing</p>
+    </footer>
+</html>
