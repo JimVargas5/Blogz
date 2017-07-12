@@ -28,10 +28,6 @@ def index():
 
 @app.route("/blog")
 def home():
-    
-
-    
-
     blogs = Blog.query.all()
 
     return render_template('home.html', title= "Build A Blog", blogs= blogs)
@@ -55,7 +51,7 @@ def AddBlog():
             new_blog = Blog(new_title, new_body)
             db.session.add(new_blog)
             db.session.commit()
-            return redirect("/")
+            return redirect("/individual?blog_title="+new_title)
         else:
             return render_template('add.html', title= "Add a blog post", 
                 add_body= new_body, add_title= new_title,
