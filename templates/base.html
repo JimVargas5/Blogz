@@ -16,32 +16,49 @@
                 text-decoration: underline;
                 cursor: pointer; 
             }
+            header {
+                text-align: center;
+                font-size: 1.25em;
+                background-color: #ff5a73;
+                border: 1px solid black;
+            }
+            footer {
+                text-align: center;
+                font-size: 1.25em;
+                background-color: #ff5a73
+            }
+            body {
+                background-color: red;
+            }
+            main {
+                background-color: #ff9392;
+                font-size: 1.125em;
+            }
         </style>
     </head>
-    <header>
-        <div>
-            <table>
-                <tr>
-                    <td> <a href= '/blog'> Home </a> </td>
-                    <td> <a href= '/add'> Add a blog post </a> </td>
-                </tr>
-            </table>
-        </div>
-    </header>
     <body>
+        <header>
+            <div>
+                <table>
+                    <tr>
+                        <td> <a href= '/blog'> Home </a> </td>
+                        <td> <a href= '/add'> Add a blog post </a> </td>
+                    </tr>
+                </table>
+            </div>
+        </header>
+        <main>
 
-        {% block content %}
+            {% block content %}
 
-        {% endblock %}
+            {% endblock %}
 
+        </main>
+        <footer>
+            <p>Jim's freakin blog thing</p>
+            <a href= "https://github.com/JimVargas5/Build-a-Blog">
+                https://github.com/JimVargas5/Build-a-Blog
+            </a> 
+        </footer>
     </body>
-    <footer>
-        <br>
-        <br>
-        <br>
-        <p>Jim's freakin blog thing</p>
-        <a href= "https://github.com/JimVargas5/Build-a-Blog">
-            https://github.com/JimVargas5/Build-a-Blog
-        </a> 
-    </footer>
 </html>
