@@ -68,7 +68,7 @@ def OneBlog():
     existing_blog = Blog.query.filter_by(title= title).first()
 
     return render_template("individual.html", 
-        title= existing_blog.title, body= existing_blog.body)
+        title= existing_blog.title, body= existing_blog.body, id= existing_blog.id)
 
 
 if __name__ == '__main__':
