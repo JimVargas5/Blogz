@@ -9,11 +9,18 @@
         <table>
 
         {% for blog in blogs %}
-            <tr>
-                <td><b> {{ blog.title }} </b></td>
-                <td> {{ blog.body }} </td>
-            </tr>
-            {% endfor %}
+            <form action="/individual">
+                <tr>
+                    <td>
+                        <!-- <label for= "blog_id"><b> {{ blog.title }} </b></label> -->
+                        <input type= "submit" class= "link_button" name= "blog_title" value= "{{ blog.title }}"/>
+                    </td>
+                    <td> 
+                        {{ blog.body }}
+                    </td>
+                </tr>
+            </form>
+        {% endfor %}
 
         </table>
     {% endif %}

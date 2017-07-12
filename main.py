@@ -28,6 +28,7 @@ def index():
 
 @app.route("/blog")
 def home():
+    
 
     
 
@@ -41,7 +42,7 @@ def AddBlog():
     error = {"title_blank": "", "body_blank": ""}
     new_body = ""
     new_title = ""
-    if request.method == 'POST': 
+    if request.method == 'POST':
         new_title = request.form["title"]
         new_body = request.form["body"]
 
@@ -63,6 +64,15 @@ def AddBlog():
     return render_template('add.html', title= "Add a blog post", 
         add_body= new_body, add_title= new_title,
         title_blank= error["title_blank"], body_blank= error["body_blank"])
+
+
+@app.route("/individual")
+def OneBlog():
+    title = request.args.get('blog_title')
+    existing_blog = Blog.query.filter_by(title= title).first()
+
+    return render_template("individual.html", 
+        title= existing_blog.title, body= existing_blog.body)
 
 
 if __name__ == '__main__':

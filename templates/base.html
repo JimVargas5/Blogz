@@ -9,9 +9,16 @@
             table, tr, td {
                 border: 1px solid black;
             }
+            .link_button { 
+                background: none;
+                border: none;
+                color: #0066ff;
+                text-decoration: underline;
+                cursor: pointer; 
+            }
         </style>
     </head>
-    <body>
+    <header>
         <div>
             <table>
                 <tr>
@@ -20,6 +27,8 @@
                 </tr>
             </table>
         </div>
+    </header>
+    <body>
 
         {% block content %}
 
@@ -31,5 +40,8 @@
         <br>
         <br>
         <p>Jim's freakin blog thing</p>
+        <a href= "https://github.com/JimVargas5/Build-a-Blog">
+            https://github.com/JimVargas5/Build-a-Blog
+        </a> 
     </footer>
 </html>
