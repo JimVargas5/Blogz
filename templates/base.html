@@ -29,6 +29,7 @@
             main {
                 background-color: #ff9392;
                 font-size: 1.125em;
+                border: 1px solid black;
             }
         </style>
     </head>
@@ -39,12 +40,14 @@
                     <tr>
                         <td> <a href= '/blog'> Home </a> </td>
                         <td> <a href= '/login'> Login </a> </td>
+                        <td> <a href= '/logout'> Logout </a> </td>
                         <td> <a href= '/add'> Add a blog post </a> </td>
                         <td> <a href= '/register'> Register </a> </td>
                     </tr>
                 </table>
             </div>
         </header>
+        <br>
         <main>
 
             {% block content %}
@@ -52,6 +55,7 @@
             {% endblock %}
 
         </main>
+        <br>
         <footer>
             <p>Jim's second freakin blog thing</p>
             <a href= "https://github.com/JimVargas5/Blogz">

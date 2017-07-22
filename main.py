@@ -42,8 +42,8 @@ def index():
 @app.route("/blog")
 def home():
     blogs = Blog.query.all()
-    welcome = ""
-    if session['user']:
+    welcome = "Not logged in"
+    if 'user' in session:
         welcome = "Logged in as: " + session['user']
 
     return render_template('home.html', title= "A Dumb Blog by Jim Vargas", 
@@ -55,6 +55,9 @@ def AddBlog():
     error = {"title_blank": "", "body_blank": ""}
     new_body = ""
     new_title = ""
+
+    welcome = "Logged in as: " + session['user']
+
     if request.method == 'POST':
         new_title = request.form["title"]
         new_body = request.form["body"]
@@ -69,14 +72,11 @@ def AddBlog():
             db.session.add(new_blog)
             db.session.commit()
             return redirect("/individual?blog_title="+new_title)
-        else:
-            return render_template('add.html', title= "Add a blog post", 
-                add_body= new_body, add_title= new_title,
-                title_blank= error["title_blank"], body_blank= error["body_blank"])
-    
+
     return render_template('add.html', title= "Add a blog post", 
         add_body= new_body, add_title= new_title,
-        title_blank= error["title_blank"], body_blank= error["body_blank"])
+        title_blank= error["title_blank"], body_blank= error["body_blank"],
+        welcome= welcome)
 
 
 @app.route("/individual")
@@ -114,11 +114,8 @@ def register():
             new_user = User(username, password)
             db.session.add(new_user)
             db.session.commit()
+            session['user'] = new_user.username
             return redirect("/blog")
-        else:
-            return render_template('register.html', title= "Register for this Blog", 
-                name_error= error["name_error"], pass_error= error["pass_error"],
-                verify_error= error["verify_error"])
 
     return render_template("register.html", title= "Register for this Blog",
         name_error= error["name_error"], pass_error= error["pass_error"],
@@ -129,6 +126,9 @@ def register():
 def login():
     error = {"name_error": "", "pass_error": ""}
     username = ""
+    #if 'user' in session:
+        #del session['user']
+        
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -149,6 +149,19 @@ def login():
     return render_template("login.html", title= "Login",
         name_error= error["name_error"], pass_error= error["pass_error"],
         username= username)
+
+
+@app.route("/logout", methods= ['POST', 'GET'])
+def logout():
+        #current_user = session['user']
+        #if request.method == 'POST':
+        #yes = request.form['logout']
+        #print(yes)
+        #session['user'] = ""
+        #return redirect("/blog")
+        #return render_template("logout.html", title= "Logout", name= current_user)
+    del session['user']
+    return redirect('/blog')
 
 
 
