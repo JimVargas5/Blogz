@@ -34,6 +34,14 @@ class User(db.Model):
         self.password = password
 
 
+@app.before_request
+def require_login():
+    if 'user' not in session:
+        allowed_routes = ['login', 'blog', 'register', 'individual', 'index']
+        if request.endpoint not in allowed_routes:
+            return redirect('/login')
+
+
 @app.route("/")
 def index():
     return redirect("/blog")
@@ -57,6 +65,7 @@ def AddBlog():
     new_title = ""
 
     welcome = "Logged in as: " + session['user']
+    existing_user = User.query.filter_by(username=session['user']).first()
 
     if request.method == 'POST':
         new_title = request.form["title"]
@@ -68,9 +77,10 @@ def AddBlog():
             error["body_blank"] = "Enter some text for your blog's body"
 
         if error["title_blank"] == "" and error["body_blank"] == "":
-            new_blog = Blog(new_title, new_body)
+            new_blog = Blog(new_title, new_body, existing_user)
             db.session.add(new_blog)
             db.session.commit()
+            author = User.query.filter_by(id= new_blog.owner_id).first()
             return redirect("/individual?blog_title="+new_title)
 
     return render_template('add.html', title= "Add a blog post", 
@@ -83,9 +93,11 @@ def AddBlog():
 def OneBlog():
     title = request.args.get('blog_title')
     existing_blog = Blog.query.filter_by(title= title).first()
+    author = User.query.filter_by(id= existing_blog.owner_id).first()
 
     return render_template("individual.html", 
-        title= existing_blog.title, body= existing_blog.body, id= existing_blog.id)
+        title= existing_blog.title, body= existing_blog.body,
+        author= author.username)
 
 
 @app.route("/register", methods=['POST', 'GET'])
@@ -160,7 +172,8 @@ def logout():
         #session['user'] = ""
         #return redirect("/blog")
         #return render_template("logout.html", title= "Logout", name= current_user)
-    del session['user']
+    if 'user' in session:
+        del session['user']
     return redirect('/blog')
 
 
