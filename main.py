@@ -42,8 +42,12 @@ def index():
 @app.route("/blog")
 def home():
     blogs = Blog.query.all()
+    welcome = ""
+    if session['user']:
+        welcome = "Logged in as: " + session['user']
 
-    return render_template('home.html', title= "Build A Blog", blogs= blogs)
+    return render_template('home.html', title= "A Dumb Blog by Jim Vargas", 
+        blogs= blogs, welcome= welcome)
 
 
 @app.route("/add", methods= ['POST', 'GET'])
@@ -110,16 +114,42 @@ def register():
             new_user = User(username, password)
             db.session.add(new_user)
             db.session.commit()
-            return redirect("/add")
+            return redirect("/blog")
         else:
             return render_template('register.html', title= "Register for this Blog", 
                 name_error= error["name_error"], pass_error= error["pass_error"],
                 verify_error= error["verify_error"])
 
-
     return render_template("register.html", title= "Register for this Blog",
         name_error= error["name_error"], pass_error= error["pass_error"],
         verify_error= error["verify_error"])
+
+
+@app.route("/login", methods=['POST', 'GET'])
+def login():
+    error = {"name_error": "", "pass_error": ""}
+    username = ""
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            if password == "":
+                error["pass_error"] = "Password cannot be blank."
+
+            elif existing_user.password == password:
+                session['user'] = existing_user.username
+                return redirect("/blog")
+            else:
+                error["pass_error"] = "Invalid password"
+        else:
+            error["name_error"] = "Invalid username. Try again or Register."
+
+    return render_template("login.html", title= "Login",
+        name_error= error["name_error"], pass_error= error["pass_error"],
+        username= username)
+
 
 
 if __name__ == '__main__':

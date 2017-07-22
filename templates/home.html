@@ -2,17 +2,16 @@
 {% block content %}
 
     <h1> {{ title }} </h1>
+    <h3> {{ welcome }} </h3>
 
     {% if blogs|length == 0 %}
         <p> No blogs yet </p>
     {% else %}
         <table>
-
         {% for blog in blogs %}
             <form action="/individual">
                 <tr>
                     <td>
-                        <!-- <label for= "blog_id"><b> {{ blog.title }} </b></label> -->
                         <input type= "submit" class= "link_button" name= "blog_title" value= "{{ blog.title }}"/>
                     </td>
                     <td> 
