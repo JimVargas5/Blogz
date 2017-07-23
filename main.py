@@ -119,7 +119,10 @@ def UserPosts():
         user_posts = existing_user.blogs
         return render_template("UserPage.html", welcome= welcome,
             title= user+"'s posts", blogs= user_posts)
-    return render_template("UserPage.html")
+
+    user_list = User.query.all()
+    return render_template("AllUsers.html", title= "All Users",
+        welcome= welcome, user_list= user_list)
 
 
 @app.route("/register", methods=['POST', 'GET'])
