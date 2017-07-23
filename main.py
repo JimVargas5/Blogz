@@ -33,12 +33,15 @@ class User(db.Model):
         self.username = username
         self.password = password
 
+    def __repr__(self):
+        return str(self.username)
+
 
 @app.before_request
 def require_login():
-    if 'user' not in session:
-        allowed_routes = ['login', 'blog', 'register', 'individual', 'index']
-        if request.endpoint not in allowed_routes:
+    allowed_routes = ['login', 'blog', 'register', 'individual', 
+        'index', 'home', 'OneBlog', 'user_page', 'UserPosts']
+    if 'user' not in session and request.endpoint not in allowed_routes:
             return redirect('/login')
 
 
@@ -91,13 +94,32 @@ def AddBlog():
 
 @app.route("/individual")
 def OneBlog():
-    title = request.args.get('blog_title')
-    existing_blog = Blog.query.filter_by(title= title).first()
-    author = User.query.filter_by(id= existing_blog.owner_id).first()
+    welcome = "Not logged in"
+    if 'user' in session:
+        welcome = "Logged in as: " + session['user']
 
-    return render_template("individual.html", 
-        title= existing_blog.title, body= existing_blog.body,
-        author= author.username)
+    title = request.args.get('blog_title')
+    if title:
+        existing_blog = Blog.query.filter_by(title= title).first()
+        author = User.query.filter_by(id= existing_blog.owner_id).first()
+        return render_template("individual.html", 
+            title= existing_blog.title, body= existing_blog.body,
+            author= author.username, welcome= welcome)
+
+
+@app.route("/UserPage")
+def UserPosts():
+    welcome = "Not logged in"
+    if 'user' in session:
+        welcome = "Logged in as: " + session['user']
+
+    user = request.args.get('user_link')
+    if user:
+        existing_user = User.query.filter_by(username= user).first()
+        user_posts = existing_user.blogs
+        return render_template("UserPage.html", welcome= welcome,
+            title= user+"'s posts", blogs= user_posts)
+    return render_template("UserPage.html")
 
 
 @app.route("/register", methods=['POST', 'GET'])
